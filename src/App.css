@@ -1,0 +1,655 @@
+/* ==========================================
+   DISEÑO FUTURISTA - GESTOR DE TAREAS
+   ========================================== */
+
+/* Variables CSS para colores neón */
+:root {
+  --neon-cyan: #00f3ff;
+  --neon-magenta: #ff00ff;
+  --neon-purple: #b829ff;
+  --neon-pink: #ff006e;
+  --neon-blue: #0099ff;
+  --dark-bg: #0a0e27;
+  --dark-card: #151932;
+  --darker-card: #0f1225;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: 
+    linear-gradient(135deg,
+      #1a1a2e 0%,
+      #16213e 25%,
+      #0f3460 50%,
+      #16213e 75%,
+      #1a1a2e 100%
+    );
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(79, 172, 254, 0.2), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(0, 242, 254, 0.15), transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(100, 100, 150, 0.1), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+   ========================================== */
+
+.App {
+  max-width: 550px;
+  margin: 60px auto;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(25px) saturate(180%);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(31, 38, 135, 0.37),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-height: auto;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  position: relative;
+  z-index: 1;
+}
+
+
+.App h1 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 5px;
+  font-size: 1.6em;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Subtítulo estilo "ELIGE UNA CATEGORÍA" */
+.App h1 + * {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 35px;
+  font-weight: 500;
+}
+
+/* ==========================================
+   SECCIONES
+   ========================================== */
+
+.seccion {
+  margin-bottom: 15px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 4px 20px rgba(31, 38, 135, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.seccion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent);
+  transition: left 0.7s ease;
+}
+
+.seccion:hover::before {
+  left: 100%;
+}
+
+.seccion:hover {
+  border-color: rgba(150, 120, 255, 0.4);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(150, 120, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 0 60px rgba(100, 80, 200, 0.1);
+  transform: translateY(-3px);
+}
+
+.seccion h3 {
+  color: #ffffff;
+  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 10px;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+/* ==========================================
+   LOGIN
+   ========================================== */
+
+.login-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.login-container input {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.login-container input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: rgba(150, 120, 255, 0.7);
+  box-shadow: 
+    0 0 25px rgba(150, 120, 255, 0.4),
+    inset 0 0 15px rgba(150, 120, 255, 0.15);
+}
+
+.login-container button {
+  padding: 12px 30px;
+  font-size: 16px;
+  background: linear-gradient(135deg, rgba(120, 100, 200, 0.8), rgba(80, 60, 160, 0.9));
+  color: white;
+  border: 1px solid rgba(150, 120, 255, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: 100%;
+  box-shadow: 
+    0 0 20px rgba(100, 80, 200, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.login-container button:hover {
+  background: linear-gradient(135deg, rgba(140, 120, 220, 0.9), rgba(100, 80, 180, 1));
+  box-shadow: 
+    0 0 30px rgba(150, 120, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.login-container .usuario-nombre {
+  font-size: 1.3em;
+  color: #ffffff;
+  margin-bottom: 15px;
+  text-shadow: 
+    0 2px 10px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(150, 120, 255, 0.6);
+}
+
+/* Sección de bienvenida */
+.bienvenida-seccion h3 {
+  margin: 0;
+  font-size: 1.2em;
+  text-transform: none;
+  letter-spacing: 1px;
+  border: none;
+  padding: 0;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.btn-logout {
+  padding: 10px 20px;
+  font-size: 14px;
+  background: linear-gradient(135deg, rgba(200, 80, 80, 0.8), rgba(180, 60, 60, 0.9));
+  color: white;
+  border: 1px solid rgba(255, 100, 100, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 
+    0 0 15px rgba(200, 80, 80, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-logout:hover {
+  background: linear-gradient(135deg, rgba(220, 100, 100, 0.9), rgba(200, 80, 80, 1));
+  box-shadow: 
+    0 0 25px rgba(220, 100, 100, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ==========================================
+   LISTA DE TAREAS
+   ========================================== */
+
+.lista-tareas-container {
+  padding: 12px;
+}
+
+.lista-tareas-container h2 {
+  margin-bottom: 15px;
+  color: #ffffff;
+  font-size: 1.3em;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Input Group */
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 12px 18px;
+  font-size: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: rgba(150, 120, 255, 0.7);
+  box-shadow: 
+    0 0 25px rgba(150, 120, 255, 0.5),
+    inset 0 0 15px rgba(150, 120, 255, 0.15);
+}
+
+.input-group input::placeholder {
+  color: rgba(200, 200, 220, 0.5);
+}
+
+.input-group button {
+  padding: 15px 35px;
+  font-size: 16px;
+  background: linear-gradient(135deg, rgba(120, 100, 200, 0.8), rgba(80, 60, 160, 0.9));
+  color: white;
+  border: 1px solid rgba(150, 120, 255, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 
+    0 0 20px rgba(100, 80, 200, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.input-group button:hover {
+  background: linear-gradient(135deg, rgba(140, 120, 220, 0.9), rgba(100, 80, 180, 1));
+  box-shadow: 
+    0 0 30px rgba(150, 120, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+.input-group button:active {
+  transform: translateY(-1px);
+}
+
+/* ==========================================
+   TAREAS
+   ========================================== */
+
+.tareas-lista {
+  list-style: none;
+  padding: 0;
+}
+
+/* Estilo de cada tarea */
+.tarea-item {
+  background: rgba(180, 190, 200, 0.25);
+  backdrop-filter: blur(10px);
+  margin-bottom: 12px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tarea-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(180deg, 
+    rgba(150, 120, 255, 0.8), 
+    rgba(100, 80, 200, 0.8)
+  );
+  box-shadow: 0 0 10px rgba(150, 120, 255, 0.6);
+}
+
+.tarea-item:hover {
+  border-color: rgba(150, 120, 255, 0.5);
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(150, 120, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 0 20px rgba(100, 80, 200, 0.1);
+  transform: translateX(5px);
+}
+
+/* Texto de la tarea */
+.tarea-texto {
+  flex: 1;
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 500;
+  line-height: 1.5;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenedor de botones */
+.tarea-botones {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Botones circulares futuristas */
+.btn-circular {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-circular::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.btn-circular:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.btn-circular:hover {
+  transform: scale(1.15) rotate(10deg);
+}
+
+.btn-circular:active {
+  transform: scale(0.95);
+}
+
+/* Botón de editar - Amarillo/Naranja neón */
+.btn-editar {
+  background: linear-gradient(135deg, #ffaa00, #ff6b00);
+  border-color: #ffaa00;
+  color: white;
+  box-shadow: 
+    0 0 15px rgba(255, 170, 0, 0.6),
+    inset 0 0 15px rgba(255, 170, 0, 0.2);
+}
+
+.btn-editar:hover {
+  box-shadow: 
+    0 0 30px rgba(255, 170, 0, 0.9),
+    inset 0 0 20px rgba(255, 170, 0, 0.3);
+  border-color: #ffdd00;
+}
+
+/* Botón de completar - Cyan neón */
+.btn-completar {
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+  border-color: var(--neon-cyan);
+  color: white;
+  box-shadow: 
+    0 0 15px rgba(0, 243, 255, 0.6),
+    inset 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+.btn-completar:hover {
+  box-shadow: 
+    0 0 30px rgba(0, 243, 255, 0.9),
+    inset 0 0 20px rgba(0, 243, 255, 0.3);
+  border-color: #00ffff;
+}
+
+/* Botón de eliminar - Magenta neón */
+.btn-eliminar {
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-magenta));
+  border-color: var(--neon-pink);
+  color: white;
+  box-shadow: 
+    0 0 15px rgba(255, 0, 110, 0.6),
+    inset 0 0 15px rgba(255, 0, 110, 0.2);
+}
+
+.btn-eliminar:hover {
+  box-shadow: 
+    0 0 30px rgba(255, 0, 110, 0.9),
+    inset 0 0 20px rgba(255, 0, 110, 0.3);
+  border-color: #ff00ff;
+}
+
+/* Botón de guardar - Cyan neón */
+.btn-guardar {
+  background: linear-gradient(135deg, #00ff88, var(--neon-cyan));
+  border-color: #00ff88;
+  color: white;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 136, 0.6),
+    inset 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.btn-guardar:hover {
+  box-shadow: 
+    0 0 30px rgba(0, 255, 136, 0.9),
+    inset 0 0 20px rgba(0, 255, 136, 0.3);
+  border-color: #00ffaa;
+}
+
+/* Botón de cancelar - Magenta neón */
+.btn-cancelar {
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-magenta));
+  border-color: var(--neon-purple);
+  color: white;
+  box-shadow: 
+    0 0 15px rgba(184, 41, 255, 0.6),
+    inset 0 0 15px rgba(184, 41, 255, 0.2);
+}
+
+.btn-cancelar:hover {
+  box-shadow: 
+    0 0 30px rgba(184, 41, 255, 0.9),
+    inset 0 0 20px rgba(184, 41, 255, 0.3);
+  border-color: #dd00ff;
+}
+
+/* Input de edición futurista */
+.tarea-input-editar {
+  flex: 1;
+  padding: 12px 18px;
+  font-size: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.25);
+  color: #2a2a2a;
+  border-radius: 12px;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.tarea-input-editar:focus {
+  outline: none;
+  border-color: rgba(150, 120, 255, 0.8);
+  box-shadow: 
+    0 0 30px rgba(150, 120, 255, 0.5),
+    inset 0 0 20px rgba(150, 120, 255, 0.15);
+}
+
+/* Mensaje vacío */
+.mensaje-vacio {
+  text-align: center;
+  color: rgba(60, 60, 80, 0.7);
+  font-style: italic;
+  padding: 25px;
+  background: rgba(200, 210, 220, 0.15);
+  border-radius: 12px;
+  border: 1px dashed rgba(100, 100, 120, 0.3);
+  font-size: 1em;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .App {
+    padding: 20px;
+  }
+  
+  .App h1 {
+    font-size: 2em;
+  }
+  
+  .input-group {
+    flex-direction: column;
+  }
+  
+  .login-container input {
+    width: 100%;
+  }
+
+  .btn-circular {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+}
+
+/* ==========================================
+   ANIMACIONES ADICIONALES
+   ========================================== */
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tarea-item {
+  animation: slideIn 0.3s ease;
+}
